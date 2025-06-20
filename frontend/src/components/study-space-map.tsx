@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
 interface SearchResult {
   id: string
   name: string
-  type: "green_space" | "park" | "bench" | "wifi"
+  type: "green_space" | "park" | "cafe" | "wifi" | "green_street" | "bench"
   description: string
   coordinates: [number, number]
   features: string[]
@@ -118,10 +118,14 @@ export default function StudySpaceMap({ results, userLocation }: StudySpaceMapPr
             return "#22c55e"
           case "park":
             return "#16a34a"
-          case "bench":
-            return "#3b82f6"
+          case "cafe":
+            return "#f59e0b"
           case "wifi":
             return "#a855f7"
+          case "green_street":
+            return "#059669"
+          case "bench":
+            return "#3b82f6"
           default:
             return "#6b7280"
         }
