@@ -1,17 +1,15 @@
 import { getParkData } from "../services/get_park_data";
 
 export default async function Home() {
-  const data = await getParkData();
-  data.forEach((d) => {
-    console.log(d);
-  });
+  const dataArrays = await getParkData(); // array of arrays
+  // flatten the array if you want all parks in a single array:
+  const flatData = dataArrays.flat();
+
   return (
     <>
       <div>Hello</div>
-      {data.map((d, i) => (
+      {flatData.map((d, i) => (
         <div key={i}>
-          {/* {JSON.stringify(d)} {/* show the raw object */} */
-          <br />
           {d.ASSET_NAME || "Unnamed Park"}
         </div>
       ))}
