@@ -26,7 +26,7 @@ const StudySpaceMap = dynamic(() => import("@/components/study-space-map"), {
 interface SearchResult {
   id: string
   name: string
-  type: "green_space" | "bench" | "wifi"
+  type: "green_space" | "park" | "bench" | "wifi"
   description: string
   coordinates: [number, number]
   features: string[]
@@ -58,22 +58,110 @@ export default function StudySpaceFinder() {
     if (!query.trim()) return
 
     setLoading(true)
-    try {
-      const params = new URLSearchParams({ q: query })
-      if (userLocation) {
-        params.append("lat", userLocation[0].toString())
-        params.append("lng", userLocation[1].toString())
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000))
+    
+    // Hard-coded examples from Toronto open data
+    const hardcodedResults: SearchResult[] = [
+      {
+        id: "1",
+        name: "High Park",
+        type: "park",
+        description: "Toronto's largest public park featuring extensive green spaces, walking trails, and peaceful study areas. Perfect for outdoor studying with beautiful scenery.",
+        coordinates: [43.6464, -79.4658],
+        features: ["Large green space", "Walking trails", "Benches", "Natural scenery", "Quiet areas"],
+        address: "1873 Bloor St W, Toronto, ON M6R 2Z3",
+        distance: userLocation ? 2.3 : undefined
+      },
+      {
+        id: "2",
+        name: "Trinity Bellwoods Park",
+        type: "green_space",
+        description: "Popular urban park with open green spaces, mature trees, and plenty of seating areas. Great for studying in a vibrant community atmosphere.",
+        coordinates: [43.6475, -79.4208],
+        features: ["Urban green space", "Mature trees", "Community atmosphere", "Seating areas", "Central location"],
+        address: "790 Queen St W, Toronto, ON M6J 1G3",
+        distance: userLocation ? 1.8 : undefined
+      },
+      {
+        id: "3",
+        name: "Queen's Park",
+        type: "park",
+        description: "Historic park surrounding the Ontario Legislative Building. Features formal gardens, walking paths, and quiet corners perfect for academic study.",
+        coordinates: [43.6629, -79.3927],
+        features: ["Historic setting", "Formal gardens", "Walking paths", "Quiet atmosphere", "Academic environment"],
+        address: "111 Wellesley St W, Toronto, ON M7A 1A5",
+        distance: userLocation ? 0.9 : undefined
+      },
+      {
+        id: "4",
+        name: "Riverdale Park East",
+        type: "green_space",
+        description: "Spacious park with rolling hills and panoramic city views. Offers peaceful study spots with natural beauty and fresh air.",
+        coordinates: [43.6689, -79.3477],
+        features: ["Panoramic views", "Rolling hills", "Natural beauty", "Fresh air", "Spacious"],
+        address: "550 Broadview Ave, Toronto, ON M4K 2N6",
+        distance: userLocation ? 3.2 : undefined
+      },
+      {
+        id: "5",
+        name: "Christie Pits Park",
+        type: "park",
+        description: "Community park with open spaces, sports facilities, and shaded areas. Good for studying with a mix of activity and quiet zones.",
+        coordinates: [43.6614, -79.4157],
+        features: ["Community atmosphere", "Shaded areas", "Sports facilities", "Open spaces", "Mixed use"],
+        address: "750 Bloor St W, Toronto, ON M6G 1L4",
+        distance: userLocation ? 2.1 : undefined
+      },
+      {
+        id: "6",
+        name: "Dufferin Grove Park",
+        type: "green_space",
+        description: "Intimate park with mature trees, community gardens, and cozy seating areas. Perfect for focused studying in a natural setting.",
+        coordinates: [43.6521, -79.4208],
+        features: ["Mature trees", "Community gardens", "Cozy seating", "Intimate setting", "Natural environment"],
+        address: "875 Dufferin St, Toronto, ON M6H 4B2",
+        distance: userLocation ? 1.5 : undefined
+      },
+      {
+        id: "7",
+        name: "Withrow Park",
+        type: "park",
+        description: "Neighborhood park with tennis courts, playground, and quiet corners. Offers a peaceful study environment away from busy streets.",
+        coordinates: [43.6689, -79.3477],
+        features: ["Neighborhood setting", "Tennis courts", "Quiet corners", "Peaceful atmosphere", "Local charm"],
+        address: "725 Logan Ave, Toronto, ON M4K 3B9",
+        distance: userLocation ? 2.8 : undefined
+      },
+      {
+        id: "8",
+        name: "Bickford Park",
+        type: "green_space",
+        description: "Small but charming park with walking paths and seating areas. Ideal for short study sessions in a relaxed environment.",
+        coordinates: [43.6614, -79.4157],
+        features: ["Walking paths", "Seating areas", "Charming setting", "Relaxed environment", "Compact size"],
+        address: "951 Bloor St W, Toronto, ON M6H 1L6",
+        distance: userLocation ? 1.9 : undefined
       }
+    ]
 
-      const response = await fetch(`/api/search?${params}`)
-      const data = await response.json()
-      setResults(data.results || [])
-    } catch (error) {
-      console.error("Search failed:", error)
-      setResults([])
-    } finally {
-      setLoading(false)
-    }
+    // Filter results based on query (simple keyword matching)
+    const filteredResults = hardcodedResults.filter(result => {
+      const searchTerms = query.toLowerCase().split(' ')
+      const resultText = `${result.name} ${result.description} ${result.features.join(' ')}`.toLowerCase()
+      
+      return searchTerms.some(term => 
+        resultText.includes(term) || 
+        result.type.includes(term.replace(' ', '_'))
+      )
+    })
+
+    // If no specific matches, return all results
+    const finalResults = filteredResults.length > 0 ? filteredResults : hardcodedResults
+
+    setResults(finalResults)
+    setLoading(false)
   }
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
