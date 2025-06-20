@@ -81,7 +81,7 @@ export default function StudySpaceMap({ results, userLocation }: StudySpaceMapPr
     const map = mapInstanceRef.current
 
     // Clear existing markers
-    map.eachLayer((layer) => {
+    map.eachLayer((layer: L.Layer) => {
       if (layer instanceof L.Marker) {
         map.removeLayer(layer)
       }
