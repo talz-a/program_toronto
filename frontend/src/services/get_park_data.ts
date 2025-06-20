@@ -20,7 +20,20 @@ const getDatastoreResource = async (resource: any): Promise<any> => {
   return response.result.records;
 };
 
-export const main = async () => {
+export type ParkAsset = {
+  _id: number;
+  LOCATIONID: string;
+  ASSET_ID: number;
+  ASSET_NAME: string;
+  TYPE: string;
+  AMENITIES: string;
+  ADDRESS: string;
+  PHONE: string;
+  URL: string;
+  geometry: string;
+};
+
+export const getParkData = async (): Promise<Array<ParkAsset>> => {
   const pkg = await getPackage();
   const datastoreResources = pkg.resources.filter(
     (r: any) => r.datastore_active,
@@ -30,5 +43,5 @@ export const main = async () => {
     const data = await getDatastoreResource(r);
     allParkData.push(data);
   }
-  return allParkData;
+  return allParkData as Array<ParkAsset>;
 };
