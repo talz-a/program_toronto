@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import dynamic from "next/dynamic"
+import Image from "next/image"
 
 // Dynamically import map to avoid SSR issues
 const StudySpaceMap = dynamic(() => import("@/components/study-space-map"), {
@@ -317,7 +318,8 @@ export default function StudySpaceFinder() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Toronto Study Space Finder</h1>
+          <Image src="/StudyGreen.png" alt="StudyGreen Logo" width={100} height={100} className="mx-auto" />
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">StudyGreen</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Find the perfect study spot using natural language. Search for parks, benches, and Wi-Fi locations across
             Toronto.
